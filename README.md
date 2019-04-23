@@ -44,7 +44,7 @@ The tester tool will unpack your submission, and the
 ```
 docker build -t <id> .
 ```
-command will be used to build your docker image (the final '.' is significant), where <id> is your TopCoder handle. 
+command will be used to build your docker image (the final '.' is significant), where `<id>` is your TopCoder handle. 
 The build process must run out of the box, i.e. it should download and install all necessary 3rd party dependencies, either download from internet or copy from the unpacked submission all necessary external data files, your model files, etc.
 Your container will be started by the
 ```
@@ -60,7 +60,8 @@ docker run -it <id>
 ## Train and test scripts
 
 Your container must contain a train and test (a.k.a. inference) script having the following specification: 
-train.sh <data-folder> should create any data files that your algorithm needs for running test.sh later. The supplied <data-folder> parameters point to a folder having training data in the same structure as is available for you during the coding phase. The allowed time limit for the train.sh script is 3 days. You may assume that the data folder path will be under /data. 	
+
+`train.sh <data-folder>` should create any data files that your algorithm needs for running test.sh later. The supplied `<data-folder>` parameters point to a folder having training data in the same structure as is available for you during the coding phase.  You may assume that the data folder path will be under /data. 	
 
 As its first step train.sh must delete the self-created models shipped with your submission. 	
 
@@ -80,7 +81,7 @@ In this case you can assume that the training data looks like this:
  	   TODO fill after structure fixed
 ```
 
-test.sh <data-folder> <output_path> should run your inference code using new, unlabeled data and should generate an output CSV file, as specified by the problem statement.  You may assume that the data folder path will be under /data. 	
+`test.sh <data-folder> <output_path>` should run your inference code using new, unlabeled data and should generate an output CSV file, as specified by the problem statement.  You may assume that the data folder path will be under /data. 	
 
 Inference should be possible to do without running training first, i.e. using only your prebuilt model files. 	
 
