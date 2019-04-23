@@ -57,7 +57,7 @@ To validate the template file supplied with this repo.  You can execute the foll
 docker run -it <id>
 ```
 
-## Training and test scripts
+## Train and test scripts
 
 Your container must contain a train and test (a.k.a. inference) script having the following specification: 
 train.sh <data-folder> should create any data files that your algorithm needs for running test.sh later. The supplied <data-folder> parameters point to a folder having training data in the same structure as is available for you during the coding phase. The allowed time limit for the train.sh script is 3 days. You may assume that the data folder path will be under /data. 	
@@ -70,13 +70,13 @@ Training should be possible to do with working with only the contest's own train
 
 A sample call to your training script (single line):
 ```
- 	./train.sh /data/training/
+ 	./train.sh /data/train/
 ```
 
 In this case you can assume that the training data looks like this:
 ```
  	 data/
- 	   training/
+ 	   train/
  	   TODO fill after structure fixed
 ```
 
