@@ -13,8 +13,9 @@ Our template supports both the "submit data" and "submit code" submission styles
    <your code>
 ```   
    
-, where /solution/solution.csv is the output your algorithm generates on the provisional test set. The format of this file will be described in the challenge specification.
-/code contains a dockerized version of your system that will be used to reproduce your results in a well defined, standardized way. This folder must contain a Dockerfile that will be used to build a docker container that will host your system during final testing. How you organize the rest of the contents of the /code folder is up to you, as long as it satisfies the requirements listed below in the Final testing section.
+The /solution/solution.csv is the output your algorithm generates on the provisional test set. The format of this file will be described in the challenge specification.
+
+The /code directory should contain a dockerized version of your system that will be used to reproduce your results in a well defined, standardized way. This folder must contain a Dockerfile that will be used to build a docker container that will host your system during final testing. How you organize the rest of the contents of the /code folder is up to you, as long as it satisfies the requirements listed below in the Final testing section.
 
 #### Notes:
 During provisional testing only your solution.csv file will be used for scoring, however the tester tool will verify that your submission file confirms to the required format. This means that at least the /code/Dockerfile must be present from day 1, even if it doesn't describe any meaningful system to be built. However, we recommend that you keep working on the dockerized version of your code as the challenge progresses, especially if you are at or close to a prize winning rank on the provisional leaderboard. 	
@@ -43,13 +44,13 @@ The tester tool will unpack your submission, and the
 ```
 docker build -t <id> .
 ```
-command will be used to build your docker image (the final \`.\` is significant), where <id> is your TopCoder handle. 
+command will be used to build your docker image (the final '.' is significant), where <id> is your TopCoder handle. 
 The build process must run out of the box, i.e. it should download and install all necessary 3rd party dependencies, either download from internet or copy from the unpacked submission all necessary external data files, your model files, etc.
 Your container will be started by the
 ```
 docker run -v <local_data_path>:/data:ro -v <local_writable_area_path>:/wdata -it <id>
 ```
-command (single line), where the -v parameter mounts the contest\`s data to the container\`s /data folder. This means that all the raw contest data will be available for your container within the /data folder. Note that your container will have read only access to the /data folder. You can store large temporary files in the /wdata folder.
+command (single line), where the -v parameter mounts the contest's data to the container's /data folder. This means that all the raw contest data will be available for your container within the /data folder. Note that your container will have read only access to the /data folder. You can store large temporary files in the /wdata folder.
 
 To validate the template file supplied with this repo.  You can execute the following command:
 ```
@@ -65,7 +66,7 @@ As its first step train.sh must delete the self-created models shipped with your
 
 Some algorithms may not need any training at all. It is a valid option to leave train.sh empty, but the file must exist nevertheless. 	
 
-Training should be possible to do with working with only the contest\`s own training data and publicly available external data. This means that this script should do all the preprocessing and training steps that are necessary to reproduce your complete training work flow. 	
+Training should be possible to do with working with only the contest's own training data and publicly available external data. This means that this script should do all the preprocessing and training steps that are necessary to reproduce your complete training work flow. 	
 
 A sample call to your training script (single line):
 ```
