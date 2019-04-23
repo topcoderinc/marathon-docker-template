@@ -13,20 +13,24 @@ Our template supports both the "submit data" and "submit code" submission styles
    <your code>
 ```   
    
-, where /solution/solution.csv is the output your algorithm generates on the provisional test set. The format of this file is described above in the Output file section.
+, where /solution/solution.csv is the output your algorithm generates on the provisional test set. The format of this file will be described in the challenge specification.
 /code contains a dockerized version of your system that will be used to reproduce your results in a well defined, standardized way. This folder must contain a Dockerfile that will be used to build a docker container that will host your system during final testing. How you organize the rest of the contents of the /code folder is up to you, as long as it satisfies the requirements listed below in the Final testing section.
 
-### Notes:
+#### Notes:
 During provisional testing only your solution.csv file will be used for scoring, however the tester tool will verify that your submission file confirms to the required format. This means that at least the /code/Dockerfile must be present from day 1, even if it doesn't describe any meaningful system to be built. However, we recommend that you keep working on the dockerized version of your code as the challenge progresses, especially if you are at or close to a prize winning rank on the provisional leaderboard. 	
+
 Make sure that your submission package is smaller than 500 MB. This means that if you use large files (external libraries, data files, pretained model files, etc) that won't fit into this limit, then your docker build process must download these from the net during building. There are several ways to achieve this, e.g. external libraries may be installed from a git repository, data files may be downloaded using wget or curl from Dropbox or Google Drive or any other public file hosting service. In any case always make sure that your build process is carefully tested end to end before you submit your package for final testing.
+
 During final testing your last submission file will be used to build your docker container.
+
 Make sure that the contents of the /solution and /code folders are in sync, i.e. your solution.csv file contains the exact output of the current version of your code.	
-To speed up the final testing process the contest admins may decide not to build and run the dockerized version of each contestant's submission. It is guaranteed however that if there are N main prizes then at least the top 2*N ranked submissions (based on the provisional leader board at the end of the submission phase) will be final tested.
+
  	
 ## Final testing
 
-To be able to successfully submit your system for final testing, some familiarity with Docker is required. If you have not used this technology before then you may first check this page and other learning material linked from there. To install docker follow these instructions. 
-Contents of the /code folder
+To be able to successfully submit your system for final testing, some familiarity with [Docker](https://www.docker.com/) is required. If you have not used this technology before then you may first check [this page](https://www.docker.com/why-docker) and other learning material linked from there. To install Docker follow [these instructions](https://www.docker.com/community-edition). 
+
+## Contents of the /code folder
 The /code folder of your submission must contain:
 1. All your code (training and inference) that are needed to reproduce your results.
 2. A dockerfile (named Dockerfile, without extension) that will be used to build your system.
@@ -39,13 +43,13 @@ The tester tool will unpack your submission, and the
 ```
 docker build -t <id> .
 ```
-command will be used to build your docker image (the final . is significant), where <id> is your TopCoder handle. 
+command will be used to build your docker image (the final &apos;.&apos; is significant), where <id> is your TopCoder handle. 
 The build process must run out of the box, i.e. it should download and install all necessary 3rd party dependencies, either download from internet or copy from the unpacked submission all necessary external data files, your model files, etc.
 Your container will be started by the
 ```
 docker run -v <local_data_path>:/data:ro -v <local_writable_area_path>:/wdata -it <id>
 ```
-command (single line), where the -v parameter mounts the contests data to the containers /data folder. This means that all the raw contest data will be available for your container within the /data folder. Note that your container will have read only access to the /data folder. You can store large temporary files in the /wdata folder.
+command (single line), where the -v parameter mounts the contest&apos;s data to the container&apos;s /data folder. This means that all the raw contest data will be available for your container within the /data folder. Note that your container will have read only access to the /data folder. You can store large temporary files in the /wdata folder.
 
 To validate the template file supplied with this repo.  You can execute the following command:
 ```
@@ -56,9 +60,13 @@ docker run -it <id>
 
 Your container must contain a train and test (a.k.a. inference) script having the following specification: 
 train.sh <data-folder> should create any data files that your algorithm needs for running test.sh later. The supplied <data-folder> parameters point to a folder having training data in the same structure as is available for you during the coding phase. The allowed time limit for the train.sh script is 3 days. You may assume that the data folder path will be under /data. 	
+
 As its first step train.sh must delete the self-created models shipped with your submission. 	
+
 Some algorithms may not need any training at all. It is a valid option to leave train.sh empty, but the file must exist nevertheless. 	
-Training should be possible to do with working with only the contest\'s own training data and publicly available external data. This means that this script should do all the preprocessing and training steps that are necessary to reproduce your complete training work flow. 	
+
+Training should be possible to do with working with only the contest&apos;s own training data and publicly available external data. This means that this script should do all the preprocessing and training steps that are necessary to reproduce your complete training work flow. 	
+
 A sample call to your training script (single line):
 ```
  	./train.sh /data/training/
@@ -72,8 +80,11 @@ In this case you can assume that the training data looks like this:
 ```
 
 test.sh <data-folder> <output_path> should run your inference code using new, unlabeled data and should generate an output CSV file, as specified by the problem statement. The allowed time limit for the test.sh script is 24 hours. The testing data folder contain similar data in the same structure as is available for you during the coding phase. The final testing data will be similar in size and in content to the provisional testing data. You may assume that the data folder path will be under /data. 	
+
 Inference should be possible to do without running training first, i.e. using only your prebuilt model files. 	
+
 It should be possible to execute your inference script multiple times on the same input data or on different input data. You must make sure that these executions don't interfere, each execution leaves your system in a state in which further executions are possible.	
+
 A sample call to your testing script (single line):
 ```
  	./test.sh /data/test/ solution.csv
