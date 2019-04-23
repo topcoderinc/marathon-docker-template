@@ -43,13 +43,13 @@ The tester tool will unpack your submission, and the
 ```
 docker build -t <id> .
 ```
-command will be used to build your docker image (the final &#39;.&#39; is significant), where <id> is your TopCoder handle. 
+command will be used to build your docker image (the final \`.\` is significant), where <id> is your TopCoder handle. 
 The build process must run out of the box, i.e. it should download and install all necessary 3rd party dependencies, either download from internet or copy from the unpacked submission all necessary external data files, your model files, etc.
 Your container will be started by the
 ```
 docker run -v <local_data_path>:/data:ro -v <local_writable_area_path>:/wdata -it <id>
 ```
-command (single line), where the -v parameter mounts the contest&#39;s data to the container&#39;s /data folder. This means that all the raw contest data will be available for your container within the /data folder. Note that your container will have read only access to the /data folder. You can store large temporary files in the /wdata folder.
+command (single line), where the -v parameter mounts the contest\`s data to the container\`s /data folder. This means that all the raw contest data will be available for your container within the /data folder. Note that your container will have read only access to the /data folder. You can store large temporary files in the /wdata folder.
 
 To validate the template file supplied with this repo.  You can execute the following command:
 ```
@@ -65,7 +65,7 @@ As its first step train.sh must delete the self-created models shipped with your
 
 Some algorithms may not need any training at all. It is a valid option to leave train.sh empty, but the file must exist nevertheless. 	
 
-Training should be possible to do with working with only the contest&#39;s own training data and publicly available external data. This means that this script should do all the preprocessing and training steps that are necessary to reproduce your complete training work flow. 	
+Training should be possible to do with working with only the contest\`s own training data and publicly available external data. This means that this script should do all the preprocessing and training steps that are necessary to reproduce your complete training work flow. 	
 
 A sample call to your training script (single line):
 ```
