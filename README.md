@@ -36,7 +36,7 @@ The /code folder of your submission must contain:
 1. All your code (training and inference) that are needed to reproduce your results.
 2. A dockerfile (named Dockerfile, without extension) that will be used to build your system.
 3. All data files that are needed during training and inference, with the exception of	
-the contests own training and testing data. You may assume that the contents of the /Training folder and the training annotations (as described in the Input files section) will be available on the machine where your docker container runs, compressed files already unpacked,
+the contest's own training and testing data. You may assume that the contents of the /Training folder and the training annotations (as described in the Input files section) will be available on the machine where your docker container runs, compressed files already unpacked,
 large data files that can be downloaded automatically either during building or running your docker script. 		
 4. Your trained model file(s). Alternatively your build process may download your model files from the network. Either way, you must make it possible to run inference without having to execute training first.	
 
@@ -50,7 +50,7 @@ Your container will be started by the
 ```
 docker run -v <local_data_path>:/data:ro -v <local_writable_area_path>:/wdata -it <id>
 ```
-command (single line), where the -v parameter mounts the contest's data to the container's /data folder. This means that all the raw contest data will be available for your container within the /data folder. Note that your container will have read only access to the /data folder. You can store large temporary files in the /wdata folder.
+command (single line), where the -v parameter mounts the contest's data to the container's /data folder. This means that all the raw contest data will be available for your container within the /data folder. Note that your container will have read only access to the /data folder. You can store large temporary files in the /wdata folder.
 
 To validate the template file supplied with this repo.  You can execute the following command:
 ```
@@ -80,7 +80,7 @@ In this case you can assume that the training data looks like this:
  	   TODO fill after structure fixed
 ```
 
-test.sh <data-folder> <output_path> should run your inference code using new, unlabeled data and should generate an output CSV file, as specified by the problem statement. The allowed time limit for the test.sh script is 24 hours. The testing data folder contain similar data in the same structure as is available for you during the coding phase. The final testing data will be similar in size and in content to the provisional testing data. You may assume that the data folder path will be under /data. 	
+test.sh <data-folder> <output_path> should run your inference code using new, unlabeled data and should generate an output CSV file, as specified by the problem statement.  You may assume that the data folder path will be under /data. 	
 
 Inference should be possible to do without running training first, i.e. using only your prebuilt model files. 	
 
