@@ -121,6 +121,11 @@ data/
         // all raw testing data,
         // e.g. unlabeled images
 ```
+## Code requirements
+Your training and inference scripts must output progress information. This may be as detailed as you wish but at the minimum it should contain the number of test cases processed so far.     
+
+Your testing code must process the test and validation data the same way, that is it must not contain any conditional logic based on whether it works on data that you have already downloaded or on unseen data. 
+
 
 ## Verification workflow
 1. `test.sh` is run on the provisional test set to verify that the results of your latest online submission can be reproduced. This test run uses your home built models.
