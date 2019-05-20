@@ -14,9 +14,9 @@ Our template supports both the "submit data" and "submit code" submission styles
    <your code>
 ```
 
-The `/solution/solution.csv` is the output your algorithm generates on the provisional test set. The format of this file will be described in the challenge specification.
+The file `/solution/solution.csv` is the output your algorithm generates on the provisional test set. The format of this file will be described in the challenge specification.
 
-The `/code` directory should contain a dockerized version of your system that will be used to reproduce your results in a well defined, standardized way. This folder must contain a `Dockerfile` that will be used to build a docker container that will host your system during final testing. How you organize the rest of the contents of the `/code` folder is up to you, as long as it satisfies the requirements listed below in the Final testing section.
+The `/code` directory should contain a dockerized version of your system that will be used to reproduce your results in a well defined, standardized way. This folder must contain a `Dockerfile` that will be used to build a docker container that will host your system during final testing. How you organize the rest of the contents of the `/code` folder is up to you, as long as it satisfies the requirements listed below in the Final testing section. This repository contains code created in a toy challenge, for demonstration only. See the [Sample challenge](#a-sample-challenge) section at the end of this document for details.
 
 #### Notes:
 - During provisional testing only your `solution.csv` file will be used for scoring, however the tester tool will verify that your submission file conforms to the required format. This means that at least the `/code/Dockerfile` must be present from day 1, even if it doesn't describe any meaningful system to be built. However, we recommend that you keep working on the dockerized version of your code as the challenge progresses, especially if you are at or close to a prize winning rank on the provisional leaderboard.
@@ -27,7 +27,6 @@ The `/code` directory should contain a dockerized version of your system that wi
 
 - Make sure that the contents of the `/solution` and `/code` folders are in sync, i.e. your solution.csv file contains the exact output of the current version of your code.
 
- 	
 ## Final testing
 
 To be able to successfully submit your system for final testing, some familiarity with [Docker](https://www.docker.com/) is required. If you have not used this technology before then you may first check [this page](https://www.docker.com/why-docker) and other learning material linked from there. To install Docker follow [these instructions](https://www.docker.com/community-edition).
@@ -55,11 +54,6 @@ Your container will be started by the
 docker run -v <local_data_path>:/data:ro -v <local_writable_area_path>:/wdata -it <id>
 ```
 command, where the `-v` parameter mounts the contest's data to the container's `/data` folder. This means that all the raw contest data will be available for your container within the `/data` folder. Note that your container will have read only access to the `/data` folder. You can store large temporary files in the `/wdata` folder.
-
-To validate the template file supplied with this repo, you can execute the following command:
-```
-docker run -it <id>
-```
 
 #### Custom docker options
 In some cases it may be necessary to pass custom options to the `docker` or `nvidia-docker` commands. If you need such flags, you should list them in a file named `flags.txt` and place this file in the `/code` folder of your submission. The file must contain a single line only. If this file exists then its content will be added to the options list of the `docker run` command.
@@ -122,9 +116,13 @@ data/
         // e.g. unlabeled images
 ```
 ## Code requirements
-Your training and inference scripts must output progress information. This may be as detailed as you wish but at the minimum it should contain the number of test cases processed so far.     
+Your training and inference scripts must output progress information. This may be as detailed as you wish but at the minimum it should contain the number of test cases processed so far.
 
-Your testing code must process the test and validation data the same way, that is it must not contain any conditional logic based on whether it works on data that you have already downloaded or on unseen data. 
+Your testing code must process the test and validation data the same way, that is it must not contain any conditional logic based on whether it works on data that you have already downloaded or on unseen data.
+
+Your `Dockerfile` must not contain `CMD` or `ENTRYPOINT` commands.
+
+Your `Dockerfile` must contain a `WORKDIR` command that makes sure that when the container starts the `test.sh` and `train.sh` scripts will be found in the current directory.
 
 
 ## Verification workflow
@@ -134,4 +132,34 @@ Your testing code must process the test and validation data the same way, that i
 4. `test.sh` is run on the final validation dataset (or on a subset of that), using the models generated in the previous step, to verify that the results achieved in step #2 above can be reproduced.
 
 A note on reproducibility: we are aware that it is not always possible to reproduce the exact same results. E.g. if you do online training then the difference in the training environments may result in different number of iterations, meaning different models. Also you may have no control over random number generation in certain 3rd party libraries. In any case, the results must be statistically similar, and in case of differences you must have a convincing explanation why the same result can not be reproduced.
+
+## A sample challenge
+For demonstration only, this repository contains code for a hypothetical challenge in which your task is to predict weight of people based on their height. To illustrate the task, the `code/data` folder contains a simple training and testing file. These files generally need not be part of your submission, in this case this is added only so that you can test the sample code.
+
+Assume that in this challenge `train.sh` is specified to take a single parameter: the location of a file containing training data. In a typical challange this would rather be a folder containg several files that store training data, but for simplicity we have a single training file now.
+
+Similarly, `test.sh` takes two parameters: path to a testing file (again, in real challenges this is typically a folder) and an output file name.
+
+Both these scripts forward their parameters to a solution written in Java, and they also pass an internal parameter: the location of a simple 'model' file. This demonstrates that the communication between the train and test scrips and the rest of your system is up to you, the testing environment is only interested in whether you comply to the input / output requirements of the train and test scripts.
+
+During training the `sample.submission.Tester` class calculates linear regression parameters from the provided training data, which is written to `/model/dummy-model.txt` and this will be used during testing by the `sample.submission.Tester` class. Make sure that the model files required during testing are already packaged in your submission (or downloaded during building your container), so that testing is possible without running training first.
+
+### Running the sample
+Build the container from within the `/code` folder by
+`docker build -t docker-template .`
+
+Note that the build process makes sure that the Java files get compiled.
+
+Launch the container with
+`docker run -it docker-template`
+
+Verify that testing works out of the box. Within the container, run
+`./test.sh ./data/testing.txt ./data/solution.csv`
+
+This should create a `solution.csv` file within the `/data` folder. This should be identical that is already present in the submission's `/solution` folder.
+
+Verify that training works:
+`./train.sh ./data/training.txt`
+
+This should overwrite the `/model/dummy-model.txt` file, so subsequent testing will use the new model instead of the one shipped with the submission.
 
