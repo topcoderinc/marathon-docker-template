@@ -1,0 +1,6 @@
+name,height,weight
+joe,1.80,75
+jack,2.10,99
+jane,1.65,56
+bill,1.70,110
+grace,1.75,60
