@@ -136,7 +136,7 @@ Similarly, `test.sh` takes two parameters: path to a testing file (again, in rea
 
 Both these scripts forward their parameters to a solution written in Java, and they also pass an internal parameter: the location of a simple 'model' file. This demonstrates that the communication between the train and test scrips and the rest of your system is up to you, the testing environment is only interested in whether you comply to the input / output requirements of the train and test scripts.
 
-During training the `sample.submission.Tester` class calculates linear regression parameters from the provided training data, which is written to `/model/dummy-model.txt` and this will be used during testing by the `sample.submission.Tester` class. Make sure that the model files required during testing are already packaged in your submission (or downloaded during building your container), so that testing is possible without running training first.
+During training the `sample.submission.Tester` class calculates linear regression parameters from the provided training data, which is written to `./model/dummy-model.txt` and this will be used during testing by the `sample.submission.Tester` class. Make sure that the model files required during testing are already packaged in your submission (or downloaded during building your container), so that testing is possible without running training first.
 
 ### Running the sample
 Build the container from within the `/code` folder by
@@ -155,5 +155,5 @@ This should create a `solution.csv` file within the `/data` folder. This should 
 Verify that training works:
 `./train.sh ./data/training.txt`
 
-This should overwrite the `/model/dummy-model.txt` file, so subsequent testing will use the new model instead of the one shipped with the submission.
+This should overwrite the `./model/dummy-model.txt` file, so subsequent testing will use the new model instead of the one shipped with the submission.
 
